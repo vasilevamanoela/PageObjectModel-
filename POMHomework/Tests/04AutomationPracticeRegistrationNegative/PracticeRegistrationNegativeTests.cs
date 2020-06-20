@@ -1,8 +1,11 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using OpenQA.Selenium;
 using POMHomework.Factories._04AutomationPracticeRegistrationNegative;
 using POMHomework.Models._04AutomationPracticeRegistrationNegative;
 using POMHomework.Pages._04AutomationPracticeRegistrationNegative;
 using POMHomework.Tests._01GoogleSearch;
+using System.IO;
 
 namespace POMHomework.Tests._04AutomationPracticeRegistrationNegative
 {
@@ -24,6 +27,13 @@ namespace POMHomework.Tests._04AutomationPracticeRegistrationNegative
         [TearDown]
         public void TearDown()
         {
+            if (TestContext.CurrentContext.Result.Outcome != ResultState.Success)
+            {
+                string dirPath = Path.GetFullPath(@"..\..\..\", Directory.GetCurrentDirectory());
+                var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
+                screenshot.SaveAsFile($"{dirPath}\\Screenshots\\{TestContext.CurrentContext.Test.FullName}.png", ScreenshotImageFormat.Png);
+            }
+
             Driver.Quit();
         }
 
